@@ -17,10 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/litepal" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
