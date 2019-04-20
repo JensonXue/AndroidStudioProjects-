@@ -1,6 +1,7 @@
 package com.example.ss.coolweather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ss.coolweather.db.City;
-import com.example.ss.coolweather.db.Country;
+import com.example.ss.coolweather.db.County;
 import com.example.ss.coolweather.db.Province;
 import com.example.ss.coolweather.util.HttpUtil;
 import com.example.ss.coolweather.util.Utility;
@@ -42,7 +43,7 @@ public class ChooseAreaFragment extends Fragment {
     private List<String> dataList = new ArrayList<>();
     private List<Province> provinceList;
     private List<City> cityList;
-    private List<Country> countryList;
+    private List<County> countryList;
 
     private Province selectedProvince;
     private City selectedCity;
@@ -72,6 +73,12 @@ public class ChooseAreaFragment extends Fragment {
                 }else if (currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if (currentLevel == LEVEL_COUNTRY){
+                    String weatherId = countryList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -136,11 +143,11 @@ public class ChooseAreaFragment extends Fragment {
         titletext.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
 
-        countryList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId())).find(Country.class);
+        countryList = DataSupport.where("cityid = ?", String.valueOf(selectedCity.getId())).find(County.class);
         if (countryList.size() > 0){
             dataList.clear();
-            for (Country country : countryList){
-                dataList.add(country.getCountryName());
+            for (County country : countryList){
+                dataList.add(country.getCountyName());
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
